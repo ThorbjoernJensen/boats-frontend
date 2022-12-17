@@ -27,6 +27,16 @@ function Header({ setErrorMsg, loggedIn, setLoggedIn }) {
         <NavLink to="/list">
           <i className="fa fa-fw fa-envelope"></i> List{" "}
         </NavLink>
+          <NavLink to="/owner">
+              <i className="fa fa-fw fa-envelope"></i> Owner
+          </NavLink>
+          <NavLink to="/harbour">
+              <i className="fa fa-fw fa-envelope"></i> Harbour
+          </NavLink>
+          <NavLink to="/boat">
+              <i className="fa fa-fw fa-envelope"></i> Boat
+          </NavLink>
+
       </div>
 
       <div className="topnavRight">

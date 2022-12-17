@@ -1,5 +1,5 @@
-import { useRef, useState, useEffect } from "react";
-import { Route, Routes } from "react-router-dom";
+import {useRef, useState, useEffect} from "react";
+import {Route, Routes} from "react-router-dom";
 import Home from "./pages/Home.jsx";
 import Search from "./pages/Search.jsx";
 import Cityinfo from "./pages/Cityinfo.jsx";
@@ -8,63 +8,97 @@ import Header from "./components/Header.jsx";
 import SignUp from "./components/SignUp.jsx";
 import Item from "./pages/Item.jsx";
 import List from "./pages/List.jsx";
+import Owner from "./pages/Owner.jsx"
+import Harbour from "./pages/Harbour";
+import Boat from "./pages/Boat.jsx";
 
 function App() {
-  const [loggedIn, setLoggedIn] = useState(false);
-  const [item, setItem] = useState({});
-  const [list, setList] = useState([]);
+    const [loggedIn, setLoggedIn] = useState(false);
+    const [item, setItem] = useState({});
+    const [list, setList] = useState([]);
 
-  const [cityInfo, setCityInfo] = useState({});
+    const [cityInfo, setCityInfo] = useState({});
+    const [owners, setOwners] = useState([]);
+    const [harbours, setHarbours] = useState([]);
+    // Event når der trykkes på submit id:
 
-  // Event når der trykkes på submit id:
-  const getItem = (input) => {
-    facade.fetchItem(input).then((res) => {
-      setItem(res);
-      console.log("fra getitem typeaf res: " + typeof res);
-    });
-  };
+    useEffect(() => {
+        const getOwners = async () => {
+            const ownersFromServer = await facade.fetchOwners();
+            console.log(ownersFromServer)
+            setOwners(ownersFromServer);
+        };
+        getOwners();
+    }, []);
 
-  const getList = async (input) => {
-    const res = await facade.fetchList(input);
+    useEffect(() => {
+        const getHarbours = async () => {
+            const harboursFromAPI = await facade.fetchHarbours();
+            console.log(harboursFromAPI)
+            setHarbours(harboursFromAPI);
+        };
+        getHarbours();
+    }, []);
 
-    setList(res);
-  };
 
-  const getCityInfo = (input) => {
-    facade.fetchCityInfo(input).then((res) => {
-      console.log(input);
-      setCityInfo(res);
-    });
-  };
+    const getItem = (input) => {
+        facade.fetchItem(input).then((res) => {
+            setItem(res);
+            console.log("fra getitem typeaf res: " + typeof res);
+        });
+    };
 
-  return (
-    <>
-      <Header setLoggedIn={setLoggedIn} loggedIn={loggedIn} />
-      <Routes>
-        <Route path="" element={<Home />} />
-        <Route path="/search" element={<Search />} />
-        <Route
-          path="/cityinfo"
-          element={<Cityinfo onGetCity={getCityInfo} cityInfo={cityInfo} />}
-        />
-        <Route path="/signup" element={<SignUp setLoggedIn={setLoggedIn} />} />
-        <Route
-          path="/item"
-          element={<Item onGetItem={getItem} item={item} />}
-        />
-        <Route
-          path="/list"
-          element={<List onGetList={getList} list={list} />}
-        />
-        <Route path="*" element={<h1>Page Not Found !!!!</h1>} />
-      </Routes>
-    </>
-  );
+    const getList = async (input) => {
+        const res = await facade.fetchList(input);
+
+        setList(res);
+    };
+
+    const getCityInfo = (input) => {
+        facade.fetchCityInfo(input).then((res) => {
+            console.log(input);
+            setCityInfo(res);
+        });
+    };
+
+    return (
+        <>
+            <Header setLoggedIn={setLoggedIn} loggedIn={loggedIn}/>
+            <Routes>
+                <Route path="" element={<Home/>}/>
+                <Route path="/search" element={<Search/>}/>
+                <Route
+                    path="/cityinfo"
+                    element={<Cityinfo onGetCity={getCityInfo} cityInfo={cityInfo}/>}
+                />
+                <Route path="/signup" element={<SignUp setLoggedIn={setLoggedIn}/>}/>
+                <Route
+                    path="/item"
+                    element={<Item onGetItem={getItem} item={item}/>}
+                />
+                <Route
+                    path="/list"
+                    element={<List onGetList={getList} list={list}/>}
+                />
+                <Route path="/owner"
+                       element={<Owner owners={owners}/>}/>
+                <Route path="*" element={<h1>Page Not Found !!!!</h1>}/>
+                <Route path="/harbour"
+                       element={<Harbour harbours={harbours}/>}/>
+                <Route path="/boat"
+                       element={<Boat harbours={harbours}/>}/>
+
+                <Route path="*" element={<h1>Page Not Found !!!!</h1>}/>
+
+            </Routes>
+        </>
+    );
 }
 
 export default App;
 
-// function LogIn({ login }) {
+// function LogIn({login}) {
+
 //   const init = { username: "", password: "" };
 //   const [loginCredentials, setLoginCredentials] = useState(init);
 //
