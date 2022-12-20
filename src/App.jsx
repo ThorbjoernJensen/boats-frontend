@@ -14,52 +14,33 @@ import Boat from "./pages/Boat.jsx";
 
 function App() {
     const [loggedIn, setLoggedIn] = useState(false);
-    const [item, setItem] = useState({});
-    const [list, setList] = useState([]);
-
-    const [cityInfo, setCityInfo] = useState({});
+    const [errorMessage, setErrorMessage] = useState("Everything ok");
     const [owners, setOwners] = useState([]);
     const [harbours, setHarbours] = useState([]);
+
     // Event når der trykkes på submit id:
 
-    useEffect(() => {
-        const getOwners = async () => {
-            const ownersFromServer = await facade.fetchOwners();
-            console.log(ownersFromServer)
-            setOwners(ownersFromServer);
-        };
-        getOwners();
-    }, []);
 
-    useEffect(() => {
-        const getHarbours = async () => {
-            const harboursFromAPI = await facade.fetchHarbours();
-            console.log(harboursFromAPI)
-            setHarbours(harboursFromAPI);
-        };
-        getHarbours();
-    }, []);
+    // useEffect(() => {
+    //     const getHarbours = async () => {
+    //         // const harboursFromAPI = await facade.fetchHarbours();
+    //         // console.log(harboursFromAPI)
+    //         // setHarbours(harboursFromAPI);
+    //     };
+    //     getHarbours();
+    // }, []);
 
+    const getOwners = async () => {
+        await facade.fetchData("/boat/owner", setOwners, "GET", null, setErrorMessage);
+        console.log(owners);
 
-    const getItem = (input) => {
-        facade.fetchItem(input).then((res) => {
-            setItem(res);
-            console.log("fra getitem typeaf res: " + typeof res);
-        });
     };
 
-    const getList = async (input) => {
-        const res = await facade.fetchList(input);
+    const getHarbours = async () => {
+        await facade.fetchData("/boat/harbour", setHarbours, "GET", null, setErrorMessage);
+        console.log(harbours);
+    }
 
-        setList(res);
-    };
-
-    const getCityInfo = (input) => {
-        facade.fetchCityInfo(input).then((res) => {
-            console.log(input);
-            setCityInfo(res);
-        });
-    };
 
     return (
         <>
@@ -67,98 +48,62 @@ function App() {
             <Routes>
                 <Route path="" element={<Home/>}/>
                 <Route path="/search" element={<Search/>}/>
-                <Route
-                    path="/cityinfo"
-                    element={<Cityinfo onGetCity={getCityInfo} cityInfo={cityInfo}/>}
-                />
                 <Route path="/signup" element={<SignUp setLoggedIn={setLoggedIn}/>}/>
-                <Route
-                    path="/item"
-                    element={<Item onGetItem={getItem} item={item}/>}
-                />
-                <Route
-                    path="/list"
-                    element={<List onGetList={getList} list={list}/>}
-                />
                 <Route path="/owner"
-                       element={<Owner owners={owners}/>}/>
-                <Route path="*" element={<h1>Page Not Found !!!!</h1>}/>
+                       element={
+                           <>
+                               {<h3> Owners </h3>}
+                               {facade.hasUserAccess("user", loggedIn) ?
+                                   <Owner owners={owners}
+                                          onGetOwners={getOwners}/> :
+                                   ("Login to see owners")}
+                           </>
+                       }
+                />
                 <Route path="/harbour"
-                       element={<Harbour harbours={harbours}/>}/>
+                       element={
+                           <>
+                               {<h3> Harbours </h3>}
+                               {facade.hasUserAccess("admin", loggedIn) ?
+                                   <Harbour harbours={harbours}
+                                            onGetHarbours={getHarbours}/> :
+                                   ("you must be logged in with admin rights to see boat details")
+                               }
+                           </>
+                       }
+                />
                 <Route path="/boat"
-                       element={<Boat harbours={harbours}/>}/>
-
+                       element={
+                           <>
+                               {<h3> Boats </h3>}
+                               {facade.hasUserAccess("admin", loggedIn) ?
+                                   <Boat harbours={harbours}
+                                         onGetHarbours={getHarbours}/> :
+                                   ("you must be logged in with admin rights to see boat details")
+                               }
+                           </>
+                       }
+                />
                 <Route path="*" element={<h1>Page Not Found !!!!</h1>}/>
-
             </Routes>
         </>
-    );
+
+    )
 }
 
 export default App;
 
-// function LogIn({login}) {
+//
+// return (
+// <div>
+// <h2>Login</h2>
+// <form onChange={onChange}>
+// <input placeholder="User Name" id="username"/>
+// <input placeholder="Password" id="password"/>
+// <button onClick={performLogin}>Login</button>
+// <button onClick=>Sign up</button>
+// </form>
+// </div>
+// )
+//
 
-//   const init = { username: "", password: "" };
-//   const [loginCredentials, setLoginCredentials] = useState(init);
-//
-//   const performLogin = (evt) => {
-//     evt.preventDefault();
-//     login(loginCredentials.username, loginCredentials.password);
-//   }
-//   const onChange = (evt) => {
-//     setLoginCredentials({ ...loginCredentials,[evt.target.id]: evt.target.value })
-//   }
-//
-//   return (
-//     <div>
-//       <h2>Login</h2>
-//       <form onChange={onChange} >
-//         <input placeholder="User Name" id="username" />
-//         <input placeholder="Password" id="password" />
-//         <button onClick={performLogin}>Login</button>
-//         <button onClick=>Sign up</button>
-//       </form>
-//     </div>
-//   )
-//
-// }
-// function LoggedIn() {
-//   const [dataFromServer, setDataFromServer] = useState("Loading...")
-//
-//   useEffect(() => {
-//     facade.fetchData().then(data=> setDataFromServer(data.msg));
-//   }, [])
-//
-//   return (
-//     <div>
-//       <h2>Data Received from server</h2>
-//       <h3>{dataFromServer}</h3>
-//     </div>
-//   )
-//
-// }
-//
-// function App() {
-//   const [loggedIn, setLoggedIn] = useState(false)
-//
-//   const logout = () => {
-//     facade.logout()
-//     setLoggedIn(false)
-//   }
-//   const login = (user, pass) => {
-//     facade.login(user, pass)
-//           .then(res => setLoggedIn(true))
-//   }
-//
-//   return (
-//     <div>
-//       {!loggedIn ? (<LogIn login={login} />) :
-//         (<div>
-//           <LoggedIn />
-//           <button onClick={logout}>Logout</button>
-//         </div>)}
-//     </div>
-//   )
-//
-// }

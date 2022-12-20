@@ -1,25 +1,20 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 
-function Owner({owners}){
+function Owner({owners, onGetOwners}) {
 // const [owners, onSetOwners]=useState([]);
 
 
-    // useEffect(() => {
-    //     const getOwners = async () => {
-    //         const tasksFromServer = await fetchOwners();
-    //         setOwners(tasksFromServer);
-    //     };
-    //     getOwners();
-    // }, []);
+    useEffect(() => {
+        onGetOwners();
+    }, []);
 
 
-
-    return(
+    return (
         <div className="container">
             <h3>Owners </h3>
             {owners.length > 0
                 ? owners.map((owner) => (
-                    <div className="owner">
+                    <div className="owner" key={owner.id}>
                         <div className="windowTop">
                             {/*<img src={item.pokemonImage} alt="" className="src" />*/}
                             <p>Name: {owner.name}</p>
@@ -33,4 +28,5 @@ function Owner({owners}){
 
     );
 }
+
 export default Owner;

@@ -1,13 +1,19 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 
-function Boat({harbours}) {
+function Boat({harbours, onGetHarbours}) {
     const [value, setValue] = useState("Vælg havn");
     const [inputValue, setInputValue] = React.useState("");
     const [harbour, setHarbour] = useState({})
 
     const harboursNames = harbours.map((harbour) => harbour.name);
+
+    useEffect(() => {
+            onGetHarbours();
+        },
+        []
+    );
 
     const choseHarbour = (newValue) => {
         const chosenHarbour = harbours.find((harbour) => harbour.name === newValue);
@@ -23,55 +29,62 @@ function Boat({harbours}) {
     return (
         // <div className="container">
         <div>
-            <h3>Boats </h3>
-            <Autocomplete
+            {/*<h3>Boats </h3>*/}
+            <Autocomplete className="drop-down"
                 /*løsning fra stackoverflow der gør at den ikke brokker sig over at initial input ikke giver nogen resultater*/
-                isOptionEqualToValue={(option, value) => option.value === value.value}
+                          isOptionEqualToValue={(option, value) => option.value === value.value}
 
-                value={value}
-                onChange={(event, newValue) => {
-                    setValue(newValue);
-                    choseHarbour(newValue);
-                }}
-                inputValue={inputValue}
-                onInputChange={(event, newInputValue) => {
-                    setInputValue(newInputValue);
-                }}
-                id="controllable-states-demo"
-                options={harboursNames}
-                sx={{width: 300}}
-                renderInput={(params) => <TextField {...params} />}
+                          value={value}
+                          onChange={(event, newValue) => {
+                              setValue(newValue);
+                              choseHarbour(newValue);
+                          }}
+                          inputValue={inputValue}
+                          onInputChange={(event, newInputValue) => {
+                              setInputValue(newInputValue);
+                          }}
+                          id="controllable-states-demo"
+                          options={harboursNames}
+                // keykey={harbour.id}
+                          sx={{width: 300}}
+                          renderInput={(params) => <TextField {...params} />}
             />
 
             {/*check for tomt objekt*/}
+            {harbour &&
 
-            <div className="owner">
-                <div>
-                    {/*<img src={item.pokemonImage} alt="" className="src" />*/}
-                    <p>Name: {harbour.name}</p>
-                    <p>Address: {harbour.address}</p>
-                    <p>Capacity: {harbour.capacity}</p>
+                <div className="owner">
+                    <div key={harbour.id}>
+                        {/*<img src={item.pokemonImage} alt="" className="src" />*/}
+                        <p>Name: {harbour.name}</p>
+                        <p>Address: {harbour.address}</p>
+                        <p>Capacity: {harbour.capacity}</p>
 
-                    {harbour.boats && harbour.boats.length !== 0 && harbour.boats.constructor !== Object ?
-                        // console.log(harbour.boats) : "no boats here"}
+                        {harbour.boats && harbour.boats.length !== 0 && harbour.boats.constructor !== Object ?
+                            // console.log(harbour.boats) : "no boats here"}
 
 
-                        // <p> boats in this harbour </p>
-                        <div>
-                            {harbour.boats.map((boat) => (
-                            <div>
-                                <div key={boat.id}>
-                                    {/*vi har noget at mappe over*/}
-                                    {/*/!*<img src={item.pokemonImage} alt="" className="src" />*!/*/}
-                                    <p>Boatname: {boat.name}</p>
-                                    <img src={boat.image}/>
-                                </div>
+                            // <p> boats in this harbour </p>
+                            <div className="card-list">
+                                <h3> Boats currently in {harbour.name}</h3>
+
+
+                                {harbour.boats.map((boat) => (
+
+                                    <div className="card-container" key={boat.id}>
+                                        {/*vi har noget at mappe over*/}
+                                        {/*/!*<img src={item.pokemonImage} alt="" className="src" />*!/*/}
+                                        <p>Boat name: {boat.name}</p>
+                                        <img src={boat.image}/>
+                                    </div>
+
+                                ))}
+
                             </div>
-                            ))}
-                        </div>
-                        : <p> No boats in this harbour </p>}
+                            : <p> No boats in this harbour </p>}
+                    </div>
                 </div>
-            </div>
+            }
         </div>
     )
 }
