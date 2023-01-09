@@ -15,19 +15,7 @@ function Header({ setErrorMsg, loggedIn, setLoggedIn }) {
         <NavLink className="" to="/">
           <i className="fa fa-fw fa-home"></i> Home
         </NavLink>
-        {/*<NavLink to="/search">*/}
-        {/*  <i className="fa fa-fw fa-search"></i> Search*/}
-        {/*</NavLink>*/}
-        {/*<NavLink to="/cityinfo">*/}
-        {/*  <i className="fa fa-fw fa-envelope"></i> Cityinfo*/}
-        {/*</NavLink>*/}
-        {/*<NavLink to="/item">*/}
-        {/*  <i className="fa fa-fw fa-envelope"></i> Item{" "}*/}
-        {/*</NavLink>*/}
-        {/*<NavLink to="/list">*/}
-        {/*  <i className="fa fa-fw fa-envelope"></i> List{" "}*/}
-        {/*</NavLink>*/}
-          <NavLink to="/owner">
+            <NavLink to="/owner">
               <i className="fa fa-fw fa-envelope"></i> Owner
           </NavLink>
           <NavLink to="/harbour">

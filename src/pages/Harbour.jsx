@@ -18,7 +18,6 @@ function Harbour({harbours, onGetHarbours}) {
                             <p>Name: {harbour.name}</p>
                             <p>Address: {harbour.address}</p>
                             <p>Capacity: {harbour.capacity}</p>
-
                         </div>
                     </div>
                 ))

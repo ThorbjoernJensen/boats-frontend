@@ -50,7 +50,6 @@ function Boat({harbours, onGetHarbours}) {
                           renderInput={(params) => <TextField {...params} />}
             />
 
-            {/*check for tomt objekt*/}
             {harbour &&
 
                 <div className="owner">
@@ -61,13 +60,9 @@ function Boat({harbours, onGetHarbours}) {
                         <p>Capacity: {harbour.capacity}</p>
 
                         {harbour.boats && harbour.boats.length !== 0 && harbour.boats.constructor !== Object ?
-                            // console.log(harbour.boats) : "no boats here"}
 
-
-                            // <p> boats in this harbour </p>
                             <div className="card-list">
                                 <h3> Boats currently in {harbour.name}</h3>
-
 
                                 {harbour.boats.map((boat) => (
 
@@ -81,7 +76,7 @@ function Boat({harbours, onGetHarbours}) {
                                 ))}
 
                             </div>
-                            : <p> No boats in this harbour </p>}
+                            : <h3> No boats in this harbour </h3>}
                     </div>
                 </div>
             }
