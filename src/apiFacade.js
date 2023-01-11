@@ -11,7 +11,7 @@ function apiFacade() {
     const loggedIn = () => {
         return getToken() != null;
     };
-    const logout = (setLoginMessage, setLoggedIn) => {
+    const logout = (setLoggedIn, setLoginMessage) => {
         localStorage.removeItem("jwtToken");
         setLoggedIn(false);
         setLoginMessage("Log in to use the API");

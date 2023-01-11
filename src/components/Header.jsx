@@ -5,6 +5,7 @@ import LoggedIn from "./LoggedIn.jsx";
 import "../styles/header.css";
 
 function Header({loggedIn, setLoggedIn, setLoginMessage, loginMessage, setErrorMessage}) {
+    console.log("loginstatus: " + loggedIn)
     return (
         <nav className="topnav">
             <div className="topnavLeft">
@@ -38,14 +39,12 @@ function Header({loggedIn, setLoggedIn, setLoginMessage, loginMessage, setErrorM
 
             <div className="topnavRight">
                 {!loggedIn ? (
-                    <Login setLoggedIn={setLoggedIn} setLoginMessage={setLoginMessage} setErrorMessage={setErrorMessage}/>
+                    <Login setLoggedIn={setLoggedIn} setLoginMessage={setLoginMessage}
+                           setErrorMessage={setErrorMessage}/>
                 ) : (
-                    <div>
-                        <NavLink to="/signup">
-                            <LoggedIn setLoggedIn={setLoggedIn} setLoginMessage={setLoginMessage}/>
-                        </NavLink>
 
-                    </div>
+                    <LoggedIn setLoggedIn={setLoggedIn} setLoginMessage={setLoginMessage}/>
+
                 )}
                 <NavLink to="/signup">
                     <button className="signUp">Sign up</button>

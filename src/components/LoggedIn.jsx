@@ -4,9 +4,7 @@ import facade from "../apiFacade.js";
 export default function LoggedIn({setLoggedIn, setLoginMessage}) {
 
     const logout = () => {
-
         facade.logout(setLoggedIn, setLoginMessage)
-
     }
 
     return (
