@@ -11,9 +11,12 @@ function apiFacade() {
     const loggedIn = () => {
         return getToken() != null;
     };
-    const logout = () => {
+    const logout = (setLoginMessage, setLoggedIn) => {
         localStorage.removeItem("jwtToken");
-        // document.querySelector("#welcomeUser").innerHTML = `Welcome`;
+        setLoggedIn(false);
+        setLoginMessage("Log in to use the API");
+        console.log("vi kom igennem logout")
+
     };
 
     function handleHttpErrors(res) {
@@ -24,7 +27,7 @@ function apiFacade() {
     }
 
     const handleErrors = (err, setErrorMessage) => {
-        if(err.status) {
+        if (err.status) {
             err.fullError.then(e => {
                 console.error(e.message)
                 if (setErrorMessage) {
@@ -38,34 +41,34 @@ function apiFacade() {
     }
 
 
-    const login = (user, password) => {
+    const login = (user, password, setLoggedIn, setLoginMessage, setErrorMessage) => {
         const opts = makeOptions("POST", true, {
             username: user,
             password: password,
         });
         return fetch(BASE_URL + "/login", opts)
             .then(handleHttpErrors)
-            // .then(res => console.log(res))
             .then((res) => {
-                document.querySelector("#welcomeUser").innerHTML = `Welcome, ${user}`;
-                // todo- set welcome message som callback
-                setToken(res.token);
+                // document.querySelector("#welcomeUser").innerHTML = `Welcome, ${user}`;
+                setToken(res.token)
+                // setErrorMessage("Logged in")
+                setLoginMessage("Welcome " + user + ". Logged in as: " + getUserRoles());
+                setLoggedIn(true)
             }).catch(err => {
                 if (err.status) {
-                    err.fullError.then(e => console.log(err.status +": " +" "+ e.message))
-                    err.fullError.then(e => alert(e.message))
+                    err.fullError.then(e => setErrorMessage(err.status + ": " + " " + e.message))
+                    err.fullError.then(e => alert(err.status + ": " + " " + e.message))
                 } else {
-                    console.log("Network error");
+                    setErrorMessage("Login failed - Network error");
+                    alert("Login failed - Network error")
                 }
             });
     };
 
     //todo - get object
-    const getUserRoles = () =>
-    {
+    const getUserRoles = () => {
         const token = getToken()
-        if (token != null)
-        {
+        if (token != null) {
             const payloadBase64 = getToken().split('.')[1]
             const decodedClaims = JSON.parse(window.atob(payloadBase64))
             const roles = decodedClaims.roles
@@ -83,8 +86,7 @@ function apiFacade() {
     //     return JSON.parse(jsonPayload);
     // }
 
-    const hasUserAccess = (neededRole, loggedIn) =>
-    {
+    const hasUserAccess = (neededRole, loggedIn) => {
         const roles = getUserRoles().split(',')
         return loggedIn && roles.includes(neededRole)
     }
@@ -109,7 +111,7 @@ function apiFacade() {
             const res = await fetch(BASE_URL + endpoint, opts)
             const data = await handleHttpErrors(res)
             return updateAction(data)
-        } catch(err) {
+        } catch (err) {
             handleErrors(err, setErrorMessage)
         }
     }

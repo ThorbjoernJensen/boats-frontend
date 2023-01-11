@@ -1,46 +1,58 @@
-import React, { useState } from "react";
-import { NavLink } from "react-router-dom";
+import React, {useState} from "react";
+import {NavLink} from "react-router-dom";
 import Login from "./Login.jsx";
 import LoggedIn from "./LoggedIn.jsx";
 import "../styles/header.css";
 
-function Header({ setErrorMsg, loggedIn, setLoggedIn }) {
-  return (
-    <nav className="topnav">
-      <div className="topnavLeft">
-        <p id="welcomeUser">Welcome</p>
-      </div>
+function Header({loggedIn, setLoggedIn, setLoginMessage, loginMessage, setErrorMessage}) {
+    return (
+        <nav className="topnav">
+            <div className="topnavLeft">
+                {/*<p id="welcomeUser">{loggedIn ? ( "Logged in as" ) : "Welcome"}</p>*/}
+                <p> {loginMessage} </p>
 
-      <div className="topnavMid">
-        <NavLink className="" to="/">
-          <i className="fa fa-fw fa-home"></i> Home
-        </NavLink>
-            <NavLink to="/owner">
-              <i className="fa fa-fw fa-envelope"></i> Owner
-          </NavLink>
-          <NavLink to="/harbour">
-              <i className="fa fa-fw fa-envelope"></i> Harbour
-          </NavLink>
-          <NavLink to="/boat">
-              <i className="fa fa-fw fa-envelope"></i> Boat
-          </NavLink>
+                {/*{facade.hasUserAccess('user', loggedIn) && (*/}
+                {/*    <li>*/}
+                {/*        <NavLink activeClassName="active" to="/jokes">*/}
+                {/*            Jokes*/}
+                {/*        </NavLink>*/}
+                {/*    </li>*/}
+                {/*)}*/}
+            </div>
 
-      </div>
+            <div className="topnavMid">
+                <NavLink className="" to="/">
+                    <i className="fa fa-fw fa-home"></i> Home
+                </NavLink>
+                <NavLink to="/owner">
+                    <i className="fa fa-fw fa-envelope"></i> Owner
+                </NavLink>
+                <NavLink to="/harbour">
+                    <i className="fa fa-fw fa-envelope"></i> Harbour
+                </NavLink>
+                <NavLink to="/boat">
+                    <i className="fa fa-fw fa-envelope"></i> Boat
+                </NavLink>
 
-      <div className="topnavRight">
-        {!loggedIn ? (
-          <Login setLoggedIn={setLoggedIn} setErrorMsg={setErrorMsg} />
-        ) : (
-          <div>
-            <LoggedIn setLoggedIn={setLoggedIn} />
-          </div>
-        )}
-        <NavLink to="/signup">
-          <button className="signUp">Sign up</button>
-        </NavLink>
-      </div>
-    </nav>
-  );
+            </div>
+
+            <div className="topnavRight">
+                {!loggedIn ? (
+                    <Login setLoggedIn={setLoggedIn} setLoginMessage={setLoginMessage} setErrorMessage={setErrorMessage}/>
+                ) : (
+                    <div>
+                        <NavLink to="/signup">
+                            <LoggedIn setLoggedIn={setLoggedIn} setLoginMessage={setLoginMessage}/>
+                        </NavLink>
+
+                    </div>
+                )}
+                <NavLink to="/signup">
+                    <button className="signUp">Sign up</button>
+                </NavLink>
+            </div>
+        </nav>
+    );
 }
 
 export default Header;

@@ -14,7 +14,8 @@ import Boat from "./pages/Boat.jsx";
 
 function App() {
     const [loggedIn, setLoggedIn] = useState(false);
-    const [errorMessage, setErrorMessage] = useState("Everything ok");
+    const [loginMessage, setLoginMessage] = useState("Log in to use the API");
+    const [errorMessage, setErrorMessage] = useState("No Errors");
     const [owners, setOwners] = useState([]);
     const [harbours, setHarbours] = useState([]);
 
@@ -44,20 +45,20 @@ function App() {
 
     return (
         <>
-            <Header setLoggedIn={setLoggedIn} loggedIn={loggedIn}/>
+            <Header setLoggedIn={setLoggedIn} loggedIn={loggedIn} setErrorMessage={setErrorMessage} setLoginMessage={setLoginMessage} loginMessage={loginMessage}/>
             <Routes>
                 <Route path="" element={<Home/>}/>
                 <Route path="/search" element={<Search/>}/>
                 <Route path="/signup" element={<SignUp setLoggedIn={setLoggedIn}/>}/>
                 <Route path="/owner"
                        element={
-                           <>
+                           <div>
                                {<h3> Owners </h3>}
                                {facade.hasUserAccess("user", loggedIn) ?
-                                   <Owner owners={owners}
-                                          onGetOwners={getOwners}/> :
+                                   (    <Owner owners={owners}
+                                          onGetOwners={getOwners}/>) :
                                    ("Login to see owners")}
-                           </>
+                           </div>
                        }
                 />
                 <Route path="/harbour"

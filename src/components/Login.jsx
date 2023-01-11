@@ -3,18 +3,18 @@ import facade from "../apiFacade.js";
 import SignUp from "./SignUp.jsx";
 import {Link} from "react-router-dom";
 
-function Login({setLoggedIn, setErrorMsg}) {
+function Login({setLoggedIn, setLoginMessage, setErrorMessage}) {
     const init = {username: "", password: ""};
     const [loginCredentials, setLoginCredentials] = useState(init);
 
     const performLogin = (evt) => {
         evt.preventDefault();
-        login(loginCredentials.username, loginCredentials.password);
+        login(loginCredentials.username, loginCredentials.password, setLoggedIn, setLoginMessage, setErrorMessage);
     }
 
     const login = (user, pass) => {
-        facade.login(user, pass)
-            .then(res => setLoggedIn(true))
+        facade.login(user, pass, setLoggedIn, setLoginMessage, setErrorMessage)
+            // .then(res => setLoggedIn(true))
     }
 
     const onChange = (evt) => {
