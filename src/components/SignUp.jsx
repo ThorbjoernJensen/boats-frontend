@@ -43,6 +43,7 @@ function SignUp({setLoggedIn}) {
                        value={signUpInfo.rPassword}/>
                 <button onClick={createUser} type="submit">Sign Up</button>
             </form>
+
         </div>
     );
 }

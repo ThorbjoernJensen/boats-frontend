@@ -26,13 +26,13 @@ function Header({loggedIn, setLoggedIn, setLoginMessage, loginMessage, setErrorM
                     <i className="fa fa-fw fa-home"></i> Home
                 </NavLink>
                 <NavLink to="/owner">
-                    <i className="fa fa-fw fa-envelope"></i> Owner
-                </NavLink>
-                <NavLink to="/harbour">
-                    <i className="fa fa-fw fa-envelope"></i> Harbour
+                    <i className="fa fa-fw fa-envelope"></i> Owners
                 </NavLink>
                 <NavLink to="/boat">
-                    <i className="fa fa-fw fa-envelope"></i> Boat
+                    <i className="fa fa-fw fa-envelope"></i> Boats
+                </NavLink>
+                <NavLink to="/harbour">
+                    <i className="fa fa-fw fa-envelope"></i> Harbours
                 </NavLink>
 
             </div>

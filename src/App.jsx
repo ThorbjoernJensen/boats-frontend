@@ -9,8 +9,9 @@ import SignUp from "./components/SignUp.jsx";
 import Item from "./pages/Item.jsx";
 import List from "./pages/List.jsx";
 import Owner from "./pages/Owner.jsx"
-import Harbour from "./pages/Harbour";
-import Boat from "./pages/Boat.jsx";
+import Boats from "./pages/Boats.jsx";
+import Harbours from "./pages/Harbours.jsx";
+import CreateBoat from "./pages/CreateBoat.jsx";
 
 function App() {
     const [loggedIn, setLoggedIn] = useState(false);
@@ -18,6 +19,7 @@ function App() {
     const [errorMessage, setErrorMessage] = useState("No Errors");
     const [owners, setOwners] = useState([]);
     const [harbours, setHarbours] = useState([]);
+    const [boats, setBoats] = useState([]);
 
     // Event når der trykkes på submit id:
 
@@ -42,10 +44,28 @@ function App() {
         console.log(harbours);
     }
 
+    // const getBoats = async () => {
+    //     await facade.fetchData("boat/owner", setBoats, "GET", null, setErrorMessage);
+    //     console.log(boats);
+    // }
+
+    const getBoats = async () => {
+        await facade.fetchData("/boat/boat", setBoats, "GET", null, setErrorMessage);
+        console.log("fra get boats" + harbours);
+    }
+
+    const createBoat = async (newBoat) => {
+
+        console.log("create boat")
+        console.log(newBoat)
+        await facade.fetchData("/boat/boat", ()=>alert("Boat created"), "POST", newBoat, setErrorMessage);
+    }
+
 
     return (
         <>
-            <Header setLoggedIn={setLoggedIn} loggedIn={loggedIn} setErrorMessage={setErrorMessage} setLoginMessage={setLoginMessage} loginMessage={loginMessage}/>
+            <Header setLoggedIn={setLoggedIn} loggedIn={loggedIn} setErrorMessage={setErrorMessage}
+                    setLoginMessage={setLoginMessage} loginMessage={loginMessage}/>
             <Routes>
                 <Route path="" element={<Home/>}/>
                 <Route path="/search" element={<Search/>}/>
@@ -55,22 +75,10 @@ function App() {
                            <div>
                                {<h3> Owners </h3>}
                                {facade.hasUserAccess("user", loggedIn) ?
-                                   (    <Owner owners={owners}
-                                          onGetOwners={getOwners}/>) :
+                                   (<Owner owners={owners}
+                                           onGetOwners={getOwners}/>) :
                                    ("Login to see owners")}
                            </div>
-                       }
-                />
-                <Route path="/harbour"
-                       element={
-                           <>
-                               {<h3> Harbours </h3>}
-                               {facade.hasUserAccess("admin", loggedIn) ?
-                                   <Harbour harbours={harbours}
-                                            onGetHarbours={getHarbours}/> :
-                                   ("you must be logged in with admin rights to see boat details")
-                               }
-                           </>
                        }
                 />
                 <Route path="/boat"
@@ -78,14 +86,36 @@ function App() {
                            <>
                                {<h3> Boats </h3>}
                                {facade.hasUserAccess("admin", loggedIn) ?
-                                   <Boat harbours={harbours}
-                                         onGetHarbours={getHarbours}/> :
+                                   <Boats boats={boats}
+                                          onGetBoats={getBoats}/> :
+                                   ("you must be logged in with admin rights to see boat details")
+                               }
+                           </>
+                       }
+                />
+                <Route path="/harbour"
+                       element={
+                           <>
+                               {<h3> Boats </h3>}
+                               {facade.hasUserAccess("admin", loggedIn) ?
+                                   <Harbours harbours={harbours}
+                                             onGetHarbours={getHarbours}/> :
                                    ("you must be logged in with admin rights to see boat details")
                                }
                            </>
                        }
                 />
                 <Route path="*" element={<h1>Page Not Found !!!!</h1>}/>
+                <Route path="/createboat" element={
+                    <div>
+                        {<h3> Create Boat </h3>}
+                        {facade.hasUserAccess("admin", loggedIn) ?
+                            (<CreateBoat onCreateBoat={createBoat}
+                                         harbours={harbours}
+                                         onGetHarbours={getHarbours}/>) :
+                            ("only admins can create boats")}
+                    </div>
+                }></Route>
             </Routes>
         </>
 
